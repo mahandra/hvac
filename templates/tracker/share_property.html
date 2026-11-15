@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block meta %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+{% block title %}{{ property.address }} · AC Maintenance{% endblock %}
+{% block brand %}<span class="navbar-brand">AC Maintenance</span>{% endblock %}
+{% block nav_actions %}{% endblock %}
+{% block content %}
+{% include "tracker/_property_header.html" %}
+<div class="action-buttons d-grid gap-2 d-sm-flex mb-3">
+  <a href="{% url 'share_pdf' share_token %}" class="btn btn-outline-secondary btn-lg">Download PDF</a>
+</div>
+{% include "tracker/_visit_history.html" %}
+{% endblock %}
+{% block lightbox %}{% include "tracker/_lightbox.html" %}{% endblock %}

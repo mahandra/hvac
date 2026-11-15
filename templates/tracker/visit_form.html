@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{% if visit %}Visit {{ visit.visit_date|date:"M j, Y" }}{% else %}New visit{% endif %} · {{ property.address }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'vendor/dropzone.min.css' %}">{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-2">
+  <a href="{% url 'property_detail' property.pk %}" class="link-secondary">&larr; {{ property.address }}</a>
+</nav>
+<h1 class="h4 mb-3">{% if visit %}Visit — {{ visit.visit_date|date:"M j, Y" }}{% else %}New visit{% endif %}</h1>
+
+<form method="post" class="card card-body mb-4 visit-form" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors|join:" " }}</div>{% endif %}
+  <div class="mb-3">
+    <label for="{{ form.visit_date.id_for_label }}" class="form-label">Date</label>
+    {{ form.visit_date }}
+    {% for e in form.visit_date.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+  </div>
+  <div class="form-check form-check-lg mb-2">
+    {{ form.outdoor_unit_cleaned }}
+    <label class="form-check-label" for="{{ form.outdoor_unit_cleaned.id_for_label }}">Outdoor unit cleaned</label>
+  </div>
+  <div class="form-check form-check-lg mb-3">
+    {{ form.filter_replaced }}
+    <label class="form-check-label" for="{{ form.filter_replaced.id_for_label }}">Indoor filter replaced</label>
+  </div>
+  <div class="mb-3">
+    <label for="{{ form.filter_size.id_for_label }}" class="form-label">Filter size</label>
+    {{ form.filter_size }}
+    {% for e in form.filter_size.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+  </div>
+  <div class="mb-3">
+    <label for="{{ form.note.id_for_label }}" class="form-label">Note</label>
+    {{ form.note }}
+  </div>
+  <div class="form-check form-check-lg mb-3">
+    {{ form.paid }}
+    <label class="form-check-label" for="{{ form.paid.id_for_label }}">Paid</label>
+  </div>
+  <div class="d-grid d-sm-flex gap-2">
+    <button type="submit" class="btn btn-primary btn-lg">{% if visit %}Save visit{% else %}Create visit{% endif %}</button>
+    {% if visit %}
+    <a href="{% url 'property_pdf' property.pk %}?visit={{ visit.pk }}" class="btn btn-outline-secondary btn-lg">Export PDF</a>
+    {% endif %}
+  </div>
+</form>
+
+{% if visit %}
+<section class="mb-4">
+  <h2 class="h5 mb-3">Photos</h2>
+  <div class="upload-buttons d-grid gap-2 d-sm-flex mb-2">
+    <label class="btn btn-success btn-lg upload-button">
+      Take photo
+      <input type="file" accept="image/*" capture="environment" class="visually-hidden" data-dropzone-input>
+    </label>
+    <label class="btn btn-outline-success btn-lg upload-button">
+      Choose from gallery
+      <input type="file" accept="image/*" multiple class="visually-hidden" data-dropzone-input>
+    </label>
+  </div>
+  <form action="{% url 'photo_upload' visit.pk %}" method="post" enctype="multipart/form-data"
+        class="dropzone mb-2" id="photo-dropzone">
+    {% csrf_token %}
+    <div class="dz-message">Drop photos here or tap to choose files</div>
+  </form>
+  <div id="upload-messages" aria-live="polite"></div>
+  {% include "tracker/_photo_grid.html" %}
+</section>
+
+<details class="mt-4 mb-5">
+  <summary class="text-danger">Delete this visit</summary>
+  <form method="post" action="{% url 'visit_delete' visit.pk %}" class="mt-2" data-confirm="Delete this visit and all its photos?">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-danger">Delete visit and its photos</button>
+  </form>
+</details>
+{% else %}
+<p class="text-body-secondary">Create the visit first, then you can add photos.</p>
+{% endif %}
+{% endblock %}
+{% block lightbox %}{% if visit %}{% include "tracker/_lightbox.html" %}{% endif %}{% endblock %}
+{% block extra_js %}
+{% if visit %}
+<script src="{% static 'vendor/dropzone.min.js' %}"></script>
+<script src="{% static 'js/upload.js' %}"></script>
+{% endif %}
+{% endblock %}

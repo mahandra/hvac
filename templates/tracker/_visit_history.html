@@ -1,0 +1,44 @@
+{% load tracker_tags %}
+<h2 class="h5 mt-4 mb-3">Visit history</h2>
+{% for visit in visits %}
+<section class="card mb-3 visit-card" id="visit-{{ visit.pk }}">
+  <div class="card-body">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+      <h3 class="h6 mb-0">
+        {{ visit.visit_date|date:"l, M j, Y" }}
+        {% if not read_only %}{% if visit.paid %}<span class="badge text-bg-success ms-1">Paid</span>{% else %}<span class="badge text-bg-warning ms-1">Unpaid</span>{% endif %}{% endif %}
+      </h3>
+      <div class="d-flex gap-2">
+        {% if read_only %}
+        <a href="{% url 'share_pdf' share_token %}?visit={{ visit.pk }}" class="btn btn-sm btn-outline-secondary">PDF</a>
+        {% else %}
+        <a href="{% url 'property_pdf' property.pk %}?visit={{ visit.pk }}" class="btn btn-sm btn-outline-secondary">PDF</a>
+        <a href="{% url 'visit_detail' visit.pk %}" class="btn btn-sm btn-primary">Open / edit</a>
+        {% endif %}
+      </div>
+    </div>
+    <ul class="list-unstyled checklist mb-2">
+      <li class="{% if visit.outdoor_unit_cleaned %}text-success{% else %}text-danger{% endif %}">{{ visit.outdoor_unit_cleaned|yesno_icon }} Outdoor unit cleaned</li>
+      <li class="{% if visit.filter_replaced %}text-success{% else %}text-danger{% endif %}">{{ visit.filter_replaced|yesno_icon }} Indoor filter replaced{% if visit.filter_size %} — size {{ visit.filter_size }}{% endif %}</li>
+    </ul>
+    {% if visit.note %}<p class="mb-2 preserve-lines">{{ visit.note }}</p>{% endif %}
+    {% with photos=visit.photos.all %}
+    {% if photos %}
+    <div class="photo-grid">
+      {% for photo in photos %}
+      <a href="{% photo_src photo 'image' %}" class="photo-thumb lightbox-link" data-gallery="visit-{{ visit.pk }}"
+         data-caption="{{ visit.visit_date|date:'M j, Y' }} · {{ photo.original_filename }}"
+         {% if not read_only %}data-delete-url="{% url 'photo_delete' photo.pk %}"{% endif %}>
+        <img src="{% photo_src photo 'thumb' %}" alt="Photo {{ forloop.counter }}" loading="lazy">
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-body-secondary small mb-0">No photos.</p>
+    {% endif %}
+    {% endwith %}
+  </div>
+</section>
+{% empty %}
+<p class="text-body-secondary">No visits recorded yet.</p>
+{% endfor %}

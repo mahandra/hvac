@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Properties · AC Maintenance{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+  <h1 class="h3 mb-0">Properties</h1>
+  <span class="text-body-secondary small">Due = no visit in the last {{ interval_days }} days</span>
+</div>
+
+<form method="get" action="{% url 'property_list' %}" class="mb-3" role="search" id="property-search">
+  <input type="search" name="q" value="{{ q }}" class="form-control form-control-lg"
+         placeholder="Search by address…" aria-label="Search by address" autocomplete="off"
+         hx-get="{% url 'property_list' %}" hx-trigger="input changed delay:300ms, search"
+         hx-include="#property-search" hx-target="#property-list" hx-push-url="true">
+</form>
+
+<div id="property-list">
+  {% include "tracker/_property_rows.html" %}
+</div>
+{% endblock %}

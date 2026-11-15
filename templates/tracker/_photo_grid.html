@@ -1,0 +1,17 @@
+{% load tracker_tags %}
+<div id="photo-grid" hx-get="{% url 'visit_photo_grid' visit.pk %}" hx-trigger="photos-changed from:body"
+     hx-swap="outerHTML">
+  {% if photos %}
+  <p class="small text-body-secondary mb-2">{{ photos|length }} photo{{ photos|length|pluralize }}</p>
+  <div class="photo-grid">
+    {% for photo in photos %}
+    <a href="{% photo_src photo 'image' %}" class="photo-thumb lightbox-link" data-gallery="visit-{{ visit.pk }}"
+       data-caption="{{ photo.original_filename }}" data-delete-url="{% url 'photo_delete' photo.pk %}">
+      <img src="{% photo_src photo 'thumb' %}" alt="Photo {{ forloop.counter }}" loading="lazy">
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-body-secondary small mb-0">No photos yet.</p>
+  {% endif %}
+</div>

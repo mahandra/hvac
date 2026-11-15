@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ property.address }} — AC maintenance</title>
+<style>
+  @page { size: Letter; margin: 15mm 12mm; @bottom-right { content: "Page " counter(page) " of " counter(pages); font-size: 8pt; color: #666; } }
+  body { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 10pt; color: #222; }
+  h1 { font-size: 16pt; margin: 0 0 4pt; }
+  .meta { color: #555; margin-bottom: 12pt; border-bottom: 1pt solid #ccc; padding-bottom: 8pt; }
+  .meta div { margin: 1pt 0; }
+  .visit { margin-bottom: 14pt; }
+  .visit h2 { font-size: 12pt; margin: 0 0 4pt; background: #eef2f6; padding: 4pt 6pt; }
+  .checklist { margin: 4pt 0; padding: 0; list-style: none; }
+  .done { color: #186a3b; } .notdone { color: #a93226; }
+  .note { white-space: pre-line; margin: 4pt 0; }
+  .grid { width: 100%; border-collapse: separate; border-spacing: 4pt; }
+  .grid td { width: 33.33%; vertical-align: top; padding: 0; }
+  .grid img { width: 100%; height: 55mm; object-fit: cover; display: block; }
+  .grid tr { page-break-inside: avoid; }
+  .muted { color: #888; }
+</style>
+</head>
+<body>
+  <h1>{{ property.address }}</h1>
+  <div class="meta">
+    <div><strong>Type:</strong> {{ property.get_property_type_display }}</div>
+    <div><strong>Tenant:</strong> {{ property.tenant_name|default:"—" }}</div>
+    <div><strong>Generated:</strong> {{ generated_at|date:"M j, Y H:i" }}</div>
+  </div>
+
+  {% for section in sections %}
+  {% with visit=section.visit %}
+  <div class="visit">
+    <h2>Visit — {{ visit.visit_date|date:"l, M j, Y" }}</h2>
+    <ul class="checklist">
+      <li class="{% if visit.outdoor_unit_cleaned %}done{% else %}notdone{% endif %}">{% if visit.outdoor_unit_cleaned %}&#10004;{% else %}&#10008;{% endif %} Outdoor unit cleaned</li>
+      <li class="{% if visit.filter_replaced %}done{% else %}notdone{% endif %}">{% if visit.filter_replaced %}&#10004;{% else %}&#10008;{% endif %} Indoor filter replaced</li>
+    </ul>
+    <div><strong>Filter size:</strong> {{ visit.filter_size|default:"—" }}</div>
+    {% if visit.note %}<div class="note"><strong>Note:</strong> {{ visit.note }}</div>{% endif %}
+    {% if section.rows %}
+    <table class="grid">
+      {% for row in section.rows %}
+      <tr>{% for img in row %}<td>{% if img %}<img src="{{ img }}" alt="">{% endif %}</td>{% endfor %}</tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p class="muted">No photos for this visit.</p>
+    {% endif %}
+  </div>
+  {% endwith %}
+  {% empty %}
+  <p class="muted">No visits recorded.</p>
+  {% endfor %}
+</body>
+</html>

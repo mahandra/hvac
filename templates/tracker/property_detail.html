@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ property.address }} · AC Maintenance{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-2">
+  <a href="{% url 'property_list' %}" class="link-secondary">&larr; All properties</a>
+</nav>
+
+{% include "tracker/_property_header.html" %}
+
+<div class="action-buttons d-grid gap-2 d-sm-flex mb-3">
+  <a href="{% url 'visit_new' property.pk %}" class="btn btn-primary btn-lg">New visit</a>
+  <a href="{% url 'property_pdf' property.pk %}" class="btn btn-outline-secondary btn-lg">Export PDF</a>
+  <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-toggle="collapse"
+          data-bs-target="#share-collapse" aria-expanded="false" aria-controls="share-collapse">Share link</button>
+  <a href="{{ property.maps_url }}" class="btn btn-outline-secondary btn-lg" target="_blank" rel="noopener">Open in Google Maps</a>
+</div>
+
+<div class="collapse mb-3" id="share-collapse">
+  {% include "tracker/_share_panel.html" %}
+</div>
+
+{% include "tracker/_visit_history.html" %}
+{% endblock %}
+{% block lightbox %}{% include "tracker/_lightbox.html" %}{% endblock %}

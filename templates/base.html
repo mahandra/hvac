@@ -1,0 +1,55 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block meta %}{% endblock %}
+  <title>{% block title %}AC Maintenance{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'vendor/bootstrap.min.css' %}">
+  {% block extra_css %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  {% block navbar %}
+  <nav class="navbar navbar-dark bg-dark app-navbar">
+    <div class="container">
+      {% block brand %}
+      <a class="navbar-brand" href="{% url 'property_list' %}">AC Maintenance</a>
+      {% endblock %}
+      {% block nav_actions %}
+      {% if user.is_authenticated %}
+      <div class="d-flex align-items-center gap-2">
+        {% if user.is_superuser %}
+        <a class="btn btn-outline-light btn-sm" href="{% url 'admin:index' %}">Admin</a>
+        {% endif %}
+        <form method="post" action="{% url 'logout' %}" class="m-0">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-light btn-sm">Log out</button>
+        </form>
+      </div>
+      {% endif %}
+      {% endblock %}
+    </div>
+  </nav>
+  {% endblock %}
+
+  <main class="container app-main">
+    {% block messages %}
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags|default:'info' }}{% endif %} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endblock %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block lightbox %}{% endblock %}
+
+  <script src="{% static 'vendor/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/htmx.min.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+  <script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

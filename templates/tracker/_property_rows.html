@@ -1,0 +1,58 @@
+{# Current sort travels with the search box: these inputs belong to the search form via form="…". #}
+<input type="hidden" name="sort" value="{{ sort }}" form="property-search">
+<input type="hidden" name="dir" value="{{ dir }}" form="property-search">
+
+<div class="card property-table-card">
+  <table class="table table-hover align-middle mb-0 property-table">
+    <thead>
+      <tr>
+        {% for h in headers %}
+        <th scope="col" class="{{ h.css }}{% if h.key == 'photos' or h.key == 'paid' or h.key == 'status' %} text-center{% endif %}"
+            {% if h.active %}aria-sort="{% if h.dir == 'asc' %}ascending{% else %}descending{% endif %}"{% endif %}>
+          <a href="{{ h.url }}" class="sort-link{% if h.active %} active{% endif %}"
+             hx-get="{% url 'property_list' %}{{ h.url }}" hx-target="#property-list" hx-push-url="true">
+            {{ h.label }}<span class="sort-indicator" aria-hidden="true">{% if h.active %}{% if h.dir == 'asc' %}▲{% else %}▼{% endif %}{% endif %}</span>
+          </a>
+        </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in properties %}
+      <tr class="property-row">
+        <td class="property-cell">
+          <a href="{% url 'property_detail' p.pk %}" class="property-link stretched-link">{{ p.address }}</a>
+          <div class="small text-body-secondary d-md-none">
+            {{ p.get_property_type_display }}{% if p.tenant_name %} · {{ p.tenant_name }}{% endif %}
+          </div>
+        </td>
+        <td class="d-none d-md-table-cell">{{ p.get_property_type_display }}</td>
+        <td class="d-none d-md-table-cell">{{ p.tenant_name|default:"—" }}</td>
+        <td class="text-nowrap">
+          {% if p.last_visit_date %}
+            <span class="d-none d-sm-inline">{{ p.last_visit_date|date:"M j, Y" }}</span>
+            <span class="d-sm-none">{{ p.last_visit_date|date:"n/j/y" }}</span>
+            <div class="small text-body-secondary d-sm-none">{{ p.last_visit_photo_count|default:0 }} photo{{ p.last_visit_photo_count|default:0|pluralize }}</div>
+            {% if p.unpaid_count %}<div class="small text-warning-emphasis d-sm-none">{% if p.unpaid_count > 1 %}{{ p.unpaid_count }} unpaid{% else %}Unpaid{% endif %}</div>{% endif %}
+          {% else %}
+            <span class="text-body-secondary">—</span>
+          {% endif %}
+        </td>
+        <td class="text-center d-none d-sm-table-cell">
+          {% if p.last_visit_date %}{{ p.last_visit_photo_count|default:0 }}{% else %}<span class="text-body-secondary">—</span>{% endif %}
+        </td>
+        <td class="text-center d-none d-sm-table-cell">
+          {% if not p.visit_count %}<span class="text-body-secondary">—</span>
+          {% elif p.unpaid_count %}<span class="badge text-bg-warning">{% if p.unpaid_count > 1 %}{{ p.unpaid_count }} unpaid{% else %}Unpaid{% endif %}</span>
+          {% else %}<span class="badge text-bg-success">Paid</span>{% endif %}
+        </td>
+        <td class="text-center">
+          {% if p.due %}<span class="badge text-bg-danger">Due</span>{% else %}<span class="badge text-bg-success">OK</span>{% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="{{ headers|length }}" class="text-body-secondary">No properties found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

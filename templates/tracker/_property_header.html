@@ -1,0 +1,9 @@
+<header class="mb-3">
+  <h1 class="h3 property-address mb-1">{{ property.address }}</h1>
+  <div class="text-body-secondary">
+    {{ property.get_property_type_display }}
+    {% if property.tenant_name %} · Tenant: {{ property.tenant_name }}{% endif %}
+    {% if due %} · <span class="badge text-bg-danger">Due</span>{% endif %}
+  </div>
+  {% if property.note %}<p class="mt-2 mb-0 preserve-lines">{{ property.note }}</p>{% endif %}
+</header>

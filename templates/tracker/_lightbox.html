@@ -1,0 +1,25 @@
+<div class="modal fade" id="lightbox" tabindex="-1" aria-label="Photo viewer" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content lightbox-content">
+      <div class="modal-header border-0">
+        <span class="lightbox-caption text-truncate" id="lightbox-caption"></span>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body lightbox-body">
+        <img id="lightbox-image" alt="Photo">
+      </div>
+      <div class="modal-footer border-0 justify-content-between">
+        <button type="button" class="btn btn-light btn-lg" id="lightbox-prev">&larr; Prev</button>
+        <span class="text-white small" id="lightbox-counter"></span>
+        {% if not read_only %}
+        <form method="post" id="lightbox-delete-form" class="m-0" data-confirm="Delete this photo? This cannot be undone.">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button type="submit" class="btn btn-danger btn-lg">Delete</button>
+        </form>
+        {% endif %}
+        <button type="button" class="btn btn-light btn-lg" id="lightbox-next">Next &rarr;</button>
+      </div>
+    </div>
+  </div>
+</div>

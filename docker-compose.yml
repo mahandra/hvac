@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-hvac}
+      POSTGRES_USER: ${POSTGRES_USER:-hvac}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hvac-change-me}
+      TZ: ${TZ:-America/New_York}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  web:
+    build:
+      context: .
+      args:
+        APP_UID: ${APP_UID:-1000}
+        APP_GID: ${APP_GID:-1000}
+    restart: unless-stopped
+    environment:
+      SECRET_KEY: ${SECRET_KEY:-insecure-change-me-in-dot-env}
+      DEBUG: ${DEBUG:-0}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-*}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-}
+      POSTGRES_DB: ${POSTGRES_DB:-hvac}
+      POSTGRES_USER: ${POSTGRES_USER:-hvac}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hvac-change-me}
+      POSTGRES_HOST: db
+      POSTGRES_PORT: "5432"
+      MAINTENANCE_INTERVAL_DAYS: ${MAINTENANCE_INTERVAL_DAYS:-180}
+      TZ: ${TZ:-America/New_York}
+      MEDIA_ROOT: /app/data/media
+      AUTO_IMPORT_XLSX: /app/data/import/properties.xlsx
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./data/media:/app/data/media
+      - ./data/import:/app/data/import:ro
+    depends_on:
+      db:
+        condition: service_healthy

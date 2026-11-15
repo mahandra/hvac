@@ -1,0 +1,82 @@
+/* Site styles on top of Bootstrap 5. Replace this file (and base.html) to re-skin the app. */
+
+html, body { overflow-x: hidden; }
+
+.app-main { padding-top: 1rem; padding-bottom: 3rem; max-width: 960px; }
+
+.page-login .login-card { max-width: 420px; margin-top: 2rem; }
+
+.property-address { overflow-wrap: anywhere; }
+
+/* Property table: whole row is tappable (stretched link), sortable headers. */
+.property-table-card { overflow: hidden; }
+.property-table { table-layout: auto; width: 100%; }
+.property-table th, .property-table td { padding: .7rem .5rem; }
+.property-table th:first-child, .property-table td:first-child { padding-left: .75rem; }
+.property-table th:last-child, .property-table td:last-child { padding-right: .75rem; }
+.property-table thead th { white-space: nowrap; background: #f8f9fa; }
+.property-table .property-row { position: relative; }
+.property-table .property-cell { overflow-wrap: break-word; word-break: normal; min-width: 0; }
+@media (max-width: 575.98px) {
+  .property-table th, .property-table td { padding: .6rem .35rem; }
+  .property-table th:first-child, .property-table td:first-child { padding-left: .6rem; }
+  .property-table th:last-child, .property-table td:last-child { padding-right: .6rem; }
+}
+.property-link { font-weight: 600; text-decoration: none; color: inherit; }
+.sort-link { color: inherit; text-decoration: none; display: inline-block; padding: .25rem 0; }
+.sort-link.active { color: var(--bs-primary); }
+.sort-indicator { font-size: .7em; margin-left: .25rem; }
+
+.preserve-lines { white-space: pre-line; }
+
+.action-buttons .btn { min-height: 48px; }
+
+/* Desktop: large touch-sized buttons are not needed, use the small Bootstrap size. */
+@media (min-width: 992px) {
+  .btn-lg {
+    --bs-btn-padding-y: .25rem;
+    --bs-btn-padding-x: .5rem;
+    --bs-btn-font-size: .875rem;
+    --bs-btn-border-radius: var(--bs-border-radius-sm);
+  }
+  .action-buttons .btn, .btn.upload-button { min-height: 0; }
+}
+
+/* Larger checkboxes for thumbs on site. */
+.form-check-lg { padding-left: 2.25rem; min-height: 2rem; display: flex; align-items: center; }
+.form-check-lg .form-check-input { width: 1.6rem; height: 1.6rem; margin-left: -2.25rem; margin-top: 0; }
+.form-check-lg .form-check-label { padding-left: .4rem; font-size: 1.05rem; }
+
+.checklist li { margin-bottom: .15rem; }
+
+/* Thumbnail grid: 3 columns on phones, more on wider screens. */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .4rem;
+}
+@media (min-width: 576px) { .photo-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 768px) { .photo-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+
+.photo-thumb { display: block; aspect-ratio: 1 / 1; overflow: hidden; border-radius: .35rem; background: #e9ecef; }
+.photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Upload area */
+.upload-button { position: relative; min-height: 52px; display: flex; align-items: center; justify-content: center; }
+.dropzone {
+  border: 2px dashed #6c757d;
+  border-radius: .5rem;
+  background: #f8f9fa;
+  min-height: 120px;
+  padding: 1rem;
+}
+.dropzone .dz-message { margin: 1.5rem 0; font-size: 1.05rem; color: #495057; }
+.dropzone .dz-preview .dz-error-message { top: 130px; }
+.dropzone .dz-preview.dz-error .dz-error-message { opacity: 1; pointer-events: auto; }
+
+/* Lightbox */
+.lightbox-content { background: rgba(0, 0, 0, .95); }
+.lightbox-caption { color: #fff; max-width: 80%; }
+.lightbox-body { display: flex; align-items: center; justify-content: center; padding: 0; }
+.lightbox-body img { max-width: 100%; max-height: calc(100vh - 150px); object-fit: contain; }
+.lightbox-content .modal-footer .btn { min-width: 88px; }
