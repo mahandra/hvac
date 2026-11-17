@@ -40,7 +40,7 @@
   <div class="d-grid d-sm-flex gap-2">
     <button type="submit" class="btn btn-primary btn-lg">{% if visit %}Save visit{% else %}Create visit{% endif %}</button>
     {% if visit %}
-    <a href="{% url 'property_pdf' property.pk %}?visit={{ visit.pk }}" class="btn btn-outline-secondary btn-lg">Export PDF</a>
+    <a href="{% url 'property_pdf' property.pk %}?visit={{ visit.pk }}" class="btn btn-tertiary btn-lg">Export PDF</a>
     {% endif %}
   </div>
 </form>
@@ -49,11 +49,11 @@
 <section class="mb-4">
   <h2 class="h5 mb-3">Photos</h2>
   <div class="upload-buttons d-grid gap-2 d-sm-flex mb-2">
-    <label class="btn btn-success btn-lg upload-button">
+    <label class="btn btn-primary btn-lg upload-button">
       Take photo
       <input type="file" accept="image/*" capture="environment" class="visually-hidden" data-dropzone-input>
     </label>
-    <label class="btn btn-outline-success btn-lg upload-button">
+    <label class="btn btn-secondary btn-lg upload-button">
       Choose from gallery
       <input type="file" accept="image/*" multiple class="visually-hidden" data-dropzone-input>
     </label>

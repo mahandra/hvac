@@ -1,17 +1,20 @@
 {% load static %}<!doctype html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#141415">
+  <meta name="color-scheme" content="dark">
   {% block meta %}{% endblock %}
   <title>{% block title %}AC Maintenance{% endblock %}</title>
+  <link rel="preload" href="{% static 'vendor/fonts/InterVariable.woff2' %}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{% static 'vendor/bootstrap.min.css' %}">
   {% block extra_css %}{% endblock %}
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
 </head>
 <body class="{% block body_class %}{% endblock %}">
   {% block navbar %}
-  <nav class="navbar navbar-dark bg-dark app-navbar">
+  <nav class="navbar app-navbar">
     <div class="container">
       {% block brand %}
       <a class="navbar-brand" href="{% url 'property_list' %}">AC Maintenance</a>
@@ -20,11 +23,11 @@
       {% if user.is_authenticated %}
       <div class="d-flex align-items-center gap-2">
         {% if user.is_superuser %}
-        <a class="btn btn-outline-light btn-sm" href="{% url 'admin:index' %}">Admin</a>
+        <a class="btn btn-tertiary btn-sm" href="{% url 'admin:index' %}">Admin</a>
         {% endif %}
         <form method="post" action="{% url 'logout' %}" class="m-0">
           {% csrf_token %}
-          <button type="submit" class="btn btn-outline-light btn-sm">Log out</button>
+          <button type="submit" class="btn btn-tertiary btn-sm">Log out</button>
         </form>
       </div>
       {% endif %}

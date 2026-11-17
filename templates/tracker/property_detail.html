@@ -9,10 +9,10 @@
 
 <div class="action-buttons d-grid gap-2 d-sm-flex mb-3">
   <a href="{% url 'visit_new' property.pk %}" class="btn btn-primary btn-lg">New visit</a>
-  <a href="{% url 'property_pdf' property.pk %}" class="btn btn-outline-secondary btn-lg">Export PDF</a>
-  <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-toggle="collapse"
+  <a href="{% url 'property_pdf' property.pk %}" class="btn btn-tertiary btn-lg">Export PDF</a>
+  <button type="button" class="btn btn-tertiary btn-lg" data-bs-toggle="collapse"
           data-bs-target="#share-collapse" aria-expanded="false" aria-controls="share-collapse">Share link</button>
-  <a href="{{ property.maps_url }}" class="btn btn-outline-secondary btn-lg" target="_blank" rel="noopener">Open in Google Maps</a>
+  <a href="{{ property.maps_url }}" class="btn btn-tertiary btn-lg" target="_blank" rel="noopener">Open in Google Maps</a>
 </div>
 
 <div class="collapse mb-3" id="share-collapse">

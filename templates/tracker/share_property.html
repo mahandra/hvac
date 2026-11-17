@@ -6,7 +6,7 @@
 {% block content %}
 {% include "tracker/_property_header.html" %}
 <div class="action-buttons d-grid gap-2 d-sm-flex mb-3">
-  <a href="{% url 'share_pdf' share_token %}" class="btn btn-outline-secondary btn-lg">Download PDF</a>
+  <a href="{% url 'share_pdf' share_token %}" class="btn btn-tertiary btn-lg">Download PDF</a>
 </div>
 {% include "tracker/_visit_history.html" %}
 {% endblock %}

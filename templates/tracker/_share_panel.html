@@ -3,13 +3,13 @@
   <label for="share-url" class="form-label">Read-only link (no login required)</label>
   <div class="input-group mb-2">
     <input type="text" id="share-url" class="form-control" value="{{ share_url }}" readonly>
-    <button type="button" class="btn btn-outline-primary" data-copy-target="#share-url">Copy</button>
+    <button type="button" class="btn btn-secondary" data-copy-target="#share-url">Copy</button>
   </div>
   <div class="d-flex flex-wrap gap-2">
     <form method="post" action="{% url 'share_manage' property.pk %}" hx-post="{% url 'share_manage' property.pk %}"
           hx-target="#share-panel" hx-swap="outerHTML" hx-confirm="Replace the link? The old link will stop working.">
       {% csrf_token %}<input type="hidden" name="action" value="regenerate">
-      <button type="submit" class="btn btn-outline-secondary">Regenerate</button>
+      <button type="submit" class="btn btn-tertiary">Regenerate</button>
     </form>
     <form method="post" action="{% url 'share_manage' property.pk %}" hx-post="{% url 'share_manage' property.pk %}"
           hx-target="#share-panel" hx-swap="outerHTML" hx-confirm="Disable the share link?">

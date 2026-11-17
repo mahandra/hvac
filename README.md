@@ -200,5 +200,7 @@ POSTGRES_PORT=55432 DEBUG=1 uv run python manage.py runserver
 POSTGRES_PORT=55432 uv run pytest
 ```
 
-The look is plain Bootstrap: all layout is in `templates/base.html` (blocks) and `static/css/app.css`, with
-no inline styles, so a new design can be dropped in without touching views.
+The look is Bootstrap 5.3 in dark color mode, re-skinned with the tokens from `DESIGN-1win.md` (near-black
+canvas, green primary / blue secondary buttons, Inter at 600/800 vendored in `static/vendor/fonts/`). All layout
+is in `templates/base.html` (blocks) and `static/css/app.css`, with no inline styles, so a new design can be
+dropped in without touching views. Screenshots (fictional demo data) are in `docs/screenshots/`.
