@@ -80,6 +80,7 @@ Persistent data lives in bind-mounted host directories and survives `docker comp
 | `DEBUG` | `0` in production |
 | `ALLOWED_HOSTS` | comma-separated host names/IPs used to reach the app (`*` = any) |
 | `CSRF_TRUSTED_ORIGINS` | e.g. `http://192.168.1.10:8001` |
+| `BEHIND_HTTPS_PROXY` | `1` behind a TLS-terminating reverse proxy that sets `X-Forwarded-Proto` (enables `SECURE_PROXY_SSL_HEADER`) |
 | `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` | database credentials |
 | `MAINTENANCE_INTERVAL_DAYS` | a property is "Due" without a visit in this many days (default 180) |
 | `TZ` | time zone, `America/New_York` |
