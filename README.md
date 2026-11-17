@@ -6,6 +6,46 @@ history with checklist, filter size, notes and photos, plus a PDF report and a r
 Stack: Python 3.13, Django 5.2 LTS, PostgreSQL 17, HTMX, Dropzone.js, Bootstrap 5 (all vendored in
 `static/vendor/`, no CDN), Gunicorn + WhiteNoise, Pillow (+ pillow-heif), WeasyPrint, openpyxl.
 
+## Screenshots
+
+All data in the screenshots is fictional.
+
+![Property list](docs/screenshots/2-properties-desktop.png)
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/3-property-mobile.png" alt="Property page (phone)" width="260"></td>
+    <td><img src="docs/screenshots/5-visit-mobile.png" alt="Visit form and photo upload (phone)" width="260"></td>
+    <td><img src="docs/screenshots/6-lightbox-mobile.png" alt="Photo viewer (phone)" width="260"></td>
+  </tr>
+  <tr>
+    <td align="center">Property page</td>
+    <td align="center">Visit form and photo upload</td>
+    <td align="center">Photo viewer</td>
+  </tr>
+</table>
+
+<details>
+<summary>More screenshots (desktop)</summary>
+
+**Log in**
+
+![Log in](docs/screenshots/1-login-desktop.png)
+
+**Property page with share link**
+
+![Property page with share link](docs/screenshots/4-share-desktop.png)
+
+**Visit form**
+
+![Visit form](docs/screenshots/5-visit-desktop.png)
+
+**Photo viewer**
+
+![Photo viewer](docs/screenshots/6-lightbox-desktop.png)
+
+</details>
+
 ## First start
 
 ```bash
