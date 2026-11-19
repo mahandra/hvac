@@ -6,7 +6,7 @@
   <div class="photo-grid">
     {% for photo in photos %}
     <a href="{% photo_src photo 'image' %}" class="photo-thumb lightbox-link" data-gallery="visit-{{ visit.pk }}"
-       data-caption="{{ photo.original_filename }}" data-delete-url="{% url 'photo_delete' photo.pk %}">
+       data-caption="{{ photo.original_filename }}" {% if user.is_superuser %}data-delete-url="{% url 'photo_delete' photo.pk %}"{% endif %}>
       <img src="{% photo_src photo 'thumb' %}" alt="Photo {{ forloop.counter }}" loading="lazy">
     </a>
     {% endfor %}

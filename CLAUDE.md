@@ -18,6 +18,8 @@ Django app for AC maintenance visits at rental properties. Spec: `SPEC.md`; user
 
 - **Auth**: `LoginRequiredMiddleware` is on; share views opt out with `@login_not_required` and send
   `X-Robots-Tag: noindex`. Admin is superuser-only (`admin.site.has_permission` override).
+  Non-superusers are read-only for visits/photos: `@superuser_required` (403) on create/edit/delete/upload,
+  templates gate controls with `user.is_superuser`. Test fixture `user` is a superuser; `viewer_client` is not.
 - **Media**: never served as static. `/media/...` goes through the login-protected `media_file` view
   (`safe_join`); share pages use token-scoped `/share/<token>/photos/<pk>/<kind>/`.
 - **EXIF orientation**: Dropzone resize copies the original EXIF (incl. Orientation) onto already-rotated

@@ -121,6 +121,11 @@ docker compose exec web python manage.py createsuperuser
 Further accounts are created in Django admin (`/admin/`, superusers only). Properties are also added and
 edited only in admin.
 
+**Access levels.** Superusers have full access. Other (non-superuser) accounts are read-only for visits:
+the visit page shows the date, Paid/Unpaid status, checklist, filter size and note as plain text; they cannot
+create, edit or delete visits, nor upload or delete photos (the server answers 403). They can still browse
+properties, view photos and export PDFs.
+
 ## Importing data
 
 Put input files under `data/import/` on the host; inside the container that is `/app/data/import/`.

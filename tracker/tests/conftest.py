@@ -42,12 +42,25 @@ def jpeg():
 
 @pytest.fixture
 def user(db):
-    return get_user_model().objects.create_user("tech", password="pw-123456")
+    """The owner/technician: a superuser with full edit access."""
+    return get_user_model().objects.create_superuser("tech", password="pw-123456")
 
 
 @pytest.fixture
 def auth_client(client, user):
     client.force_login(user)
+    return client
+
+
+@pytest.fixture
+def viewer(db):
+    """A regular (non-superuser) account: read-only access to visits."""
+    return get_user_model().objects.create_user("viewer", password="pw-123456")
+
+
+@pytest.fixture
+def viewer_client(client, viewer):
+    client.force_login(viewer)
     return client
 
 

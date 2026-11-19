@@ -7,6 +7,7 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_not_required
+from django.core.exceptions import PermissionDenied
 from django.db.models import Count, OuterRef, Q, Subquery
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -25,6 +26,18 @@ from .services import add_uploaded_photo
 
 def _is_htmx(request) -> bool:
     return request.headers.get("HX-Request") == "true"
+
+
+def superuser_required(view):
+    """Only superusers may change visits and photos; other logged-in users get read-only access."""
+
+    @wraps(view)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_superuser:
+            raise PermissionDenied
+        return view(request, *args, **kwargs)
+
+    return wrapper
 
 
 def noindex(view):
@@ -234,6 +247,7 @@ def share_photo(request, token, pk, kind):
 # --------------------------------------------------------------------------- visits
 
 
+@superuser_required
 def visit_new(request, pk):
     prop = get_object_or_404(Property, pk=pk)
     if request.method == "POST":
@@ -264,6 +278,8 @@ def visit_new(request, pk):
 
 def visit_detail(request, pk):
     visit = get_object_or_404(Visit.objects.select_related("property"), pk=pk)
+    if request.method == "POST" and not request.user.is_superuser:
+        raise PermissionDenied
     if request.method == "POST":
         form = VisitForm(request.POST, instance=visit)
         if form.is_valid():
@@ -280,6 +296,7 @@ def visit_detail(request, pk):
 
 
 @require_POST
+@superuser_required
 def visit_delete(request, pk):
     visit = get_object_or_404(Visit, pk=pk)
     prop = visit.property
@@ -298,6 +315,7 @@ def visit_photo_grid(request, pk):
 
 
 @require_POST
+@superuser_required
 def photo_upload(request, pk):
     visit = get_object_or_404(Visit.objects.select_related("property"), pk=pk)
     upload = request.FILES.get("file")
@@ -324,6 +342,7 @@ def photo_upload(request, pk):
 
 
 @require_POST
+@superuser_required
 def photo_delete(request, pk):
     photo = get_object_or_404(Photo.objects.select_related("visit"), pk=pk)
     visit = photo.visit

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static tracker_tags %}
 {% block title %}{% if visit %}Visit {{ visit.visit_date|date:"M j, Y" }}{% else %}New visit{% endif %} · {{ property.address }}{% endblock %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'vendor/dropzone.min.css' %}">{% endblock %}
 {% block content %}
@@ -8,6 +8,7 @@
 </nav>
 <h1 class="h4 mb-3">{% if visit %}Visit — {{ visit.visit_date|date:"M j, Y" }}{% else %}New visit{% endif %}</h1>
 
+{% if user.is_superuser %}
 <form method="post" class="card card-body mb-4 visit-form" novalidate>
   {% csrf_token %}
   {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors|join:" " }}</div>{% endif %}
@@ -44,10 +45,35 @@
     {% endif %}
   </div>
 </form>
+{% else %}
+<section class="card card-body mb-4 visit-readonly">
+  <dl class="visit-fields mb-3">
+    <dt>Date</dt>
+    <dd>{{ visit.visit_date|date:"l, M j, Y" }}</dd>
+    <dt>Status</dt>
+    <dd>{% if visit.paid %}<span class="badge text-bg-success">Paid</span>{% else %}<span class="badge text-bg-warning">Unpaid</span>{% endif %}</dd>
+    <dt>Checklist</dt>
+    <dd>
+      <ul class="list-unstyled checklist mb-0">
+        <li class="{% if visit.outdoor_unit_cleaned %}text-success{% else %}text-danger{% endif %}">{{ visit.outdoor_unit_cleaned|yesno_icon }} Outdoor unit cleaned</li>
+        <li class="{% if visit.filter_replaced %}text-success{% else %}text-danger{% endif %}">{{ visit.filter_replaced|yesno_icon }} Indoor filter replaced</li>
+      </ul>
+    </dd>
+    <dt>Filter size</dt>
+    <dd>{{ visit.filter_size|default:"—" }}</dd>
+    <dt>Note</dt>
+    <dd class="preserve-lines">{{ visit.note|default:"—" }}</dd>
+  </dl>
+  <div class="d-grid d-sm-flex gap-2">
+    <a href="{% url 'property_pdf' property.pk %}?visit={{ visit.pk }}" class="btn btn-tertiary btn-lg">Export PDF</a>
+  </div>
+</section>
+{% endif %}
 
 {% if visit %}
 <section class="mb-4">
   <h2 class="h5 mb-3">Photos</h2>
+  {% if user.is_superuser %}
   <div class="upload-buttons d-grid gap-2 d-sm-flex mb-2">
     <label class="btn btn-primary btn-lg upload-button">
       Take photo
@@ -64,9 +90,11 @@
     <div class="dz-message">Drop photos here or tap to choose files</div>
   </form>
   <div id="upload-messages" aria-live="polite"></div>
+  {% endif %}
   {% include "tracker/_photo_grid.html" %}
 </section>
 
+{% if user.is_superuser %}
 <details class="mt-4 mb-5">
   <summary class="text-danger">Delete this visit</summary>
   <form method="post" action="{% url 'visit_delete' visit.pk %}" class="mt-2" data-confirm="Delete this visit and all its photos?">
@@ -74,13 +102,14 @@
     <button type="submit" class="btn btn-outline-danger">Delete visit and its photos</button>
   </form>
 </details>
+{% endif %}
 {% else %}
 <p class="text-body-secondary">Create the visit first, then you can add photos.</p>
 {% endif %}
 {% endblock %}
 {% block lightbox %}{% if visit %}{% include "tracker/_lightbox.html" %}{% endif %}{% endblock %}
 {% block extra_js %}
-{% if visit %}
+{% if visit and user.is_superuser %}
 <script src="{% static 'vendor/dropzone.min.js' %}"></script>
 <script src="{% static 'js/upload.js' %}"></script>
 {% endif %}

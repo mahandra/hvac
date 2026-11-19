@@ -303,6 +303,11 @@ label, .form-label { color: var(--app-muted); font-size: .8125rem; }
 
 .checklist li { margin-bottom: .15rem; }
 
+/* Read-only visit page (non-superusers): label / value pairs. */
+.visit-fields dt { color: var(--app-muted); font-size: .8125rem; font-weight: 400; }
+.visit-fields dd { margin-bottom: .75rem; }
+.visit-fields dd:last-child { margin-bottom: 0; }
+
 /* ---- Visit cards ---- */
 .visit-card h3 { font-weight: 800; }
 

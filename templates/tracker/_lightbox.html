@@ -11,7 +11,7 @@
       <div class="modal-footer border-0 justify-content-between">
         <button type="button" class="btn btn-tertiary btn-lg" id="lightbox-prev">&larr; Prev</button>
         <span class="text-white small" id="lightbox-counter"></span>
-        {% if not read_only %}
+        {% if user.is_superuser and not read_only %}
         <form method="post" id="lightbox-delete-form" class="m-0" data-confirm="Delete this photo? This cannot be undone.">
           {% csrf_token %}
           <input type="hidden" name="next" value="{{ request.get_full_path }}">

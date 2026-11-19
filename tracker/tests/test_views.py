@@ -181,10 +181,10 @@ def test_login_page_loads(client):
     assert 'name="password"' in resp.content.decode()
 
 
-def test_admin_superuser_only(client, user, django_user_model):
-    user.is_staff = True
-    user.save()
-    client.force_login(user)
+def test_admin_superuser_only(client, viewer, django_user_model):
+    viewer.is_staff = True
+    viewer.save()
+    client.force_login(viewer)
     assert client.get("/admin/").status_code == 302  # staff but not superuser
     admin = django_user_model.objects.create_superuser("boss", password="pw-123456")
     client.force_login(admin)

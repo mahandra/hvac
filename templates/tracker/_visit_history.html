@@ -13,7 +13,7 @@
         <a href="{% url 'share_pdf' share_token %}?visit={{ visit.pk }}" class="btn btn-sm btn-tertiary">PDF</a>
         {% else %}
         <a href="{% url 'property_pdf' property.pk %}?visit={{ visit.pk }}" class="btn btn-sm btn-tertiary">PDF</a>
-        <a href="{% url 'visit_detail' visit.pk %}" class="btn btn-sm btn-secondary">Open / edit</a>
+        <a href="{% url 'visit_detail' visit.pk %}" class="btn btn-sm btn-secondary">{% if user.is_superuser %}Open / edit{% else %}Open{% endif %}</a>
         {% endif %}
       </div>
     </div>
@@ -28,7 +28,7 @@
       {% for photo in photos %}
       <a href="{% photo_src photo 'image' %}" class="photo-thumb lightbox-link" data-gallery="visit-{{ visit.pk }}"
          data-caption="{{ visit.visit_date|date:'M j, Y' }} · {{ photo.original_filename }}"
-         {% if not read_only %}data-delete-url="{% url 'photo_delete' photo.pk %}"{% endif %}>
+         {% if user.is_superuser and not read_only %}data-delete-url="{% url 'photo_delete' photo.pk %}"{% endif %}>
         <img src="{% photo_src photo 'thumb' %}" alt="Photo {{ forloop.counter }}" loading="lazy">
       </a>
       {% endfor %}
